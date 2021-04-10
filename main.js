@@ -1,4 +1,5 @@
 let doc = document;
+doc.querySelector('head title').innerText = 'homework-2'; //  строчка лишняя, добавил что бы запушить ветку, не сразу увиедел, что нужно в отдельной ветке делать дз
 const $arena = doc.querySelector('.root .arenas');
 const scorpion = {
     name: 'Scorpion',
