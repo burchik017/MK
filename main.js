@@ -37,9 +37,11 @@ function changeHP(playerObj) {
 
     if (playerObj.hp <= 0) {
         playerObj.hp = 0;
+        doc.querySelector('.root .arenas').appendChild(playerLose(playerObj.name));
+        randomBtn.disabled = true;
+        randomBtn.style.opacity = 0;
     }
 }
-
 
 
 function createElement(tag, className) {
