@@ -1,47 +1,67 @@
-let doc = document;
-doc.querySelector('head title').innerText = 'homework-2'; //  строчка лишняя, добавил что бы запушить ветку, не сразу увиедел, что нужно в отдельной ветке делать дз
-const $arena = doc.querySelector('.root .arenas');
-const scorpion = {
+const doc = document;
+const $arenas = doc.querySelector('.root .arenas');
+const randomBtn = doc.querySelector('.root .arenas .button');
+
+const player1 = {
+    player: 1,
     name: 'Scorpion',
-    hp: 60,
+    hp: 100,
     img: '/assets/chempoins/scorpion.gif',
     weapon: ['gun'],
     attack: function () {
-        return console.log(scorpion.name + ' ' + 'fight')
+        return console.log(this.name + ' ' + 'fight...')
     }
 };
-const kitana = {
+const player2 = {
+    player: 2,
     name: 'Kitana',
-    hp: 80,
+    hp: 100,
     img: '/assets/chempoins/kitana.gif',
     weapon: ['gun'],
     attack: function () {
-        return console.log(this.name + ' ' + 'fight')
+        return console.log(this.name + ' ' + 'fight...')
     }
 };
 
-scorpion.attack();
-kitana.attack();
+function randomAttack () {
+    let setAttack = Math.floor(Math.random() * 20);
+    // console.log(setAttack);
+    return setAttack;
+}
 
-function createPlayer(id, player) {
-    let $mainCont = doc.createElement('div');
-        $mainCont.classList.add(id);
+function changeHP(playerObj) {
+    const $playerLife = doc.querySelector('.player'+ playerObj.player +' .life');
 
-    $arena.appendChild($mainCont);
+    playerObj.hp -= randomAttack();
+    $playerLife.style.width = playerObj.hp + '%';
 
-    let $progressBar = doc.createElement('div');
-        $progressBar.classList.add('progressbar');
-            let $playerLife = doc.createElement('div');
-                $playerLife.classList.add('life');
-                $playerLife.style.width = player.hp + "%";
-            let $playerName = doc.createElement('div');
-                $playerName.classList.add('name');
-                $playerName.innerText = player.name;
+    if (playerObj.hp <= 0) {
+        playerObj.hp = 0;
+    }
+}
 
-    let $character = doc.createElement('div');
-        $character.classList.add('character');
-            let $playerImg = doc.createElement('img');
-                $playerImg.src = player.img;
+
+
+function createElement(tag, className) {
+    const $tag = doc.createElement(tag);
+    if (className) {
+        $tag.classList.add(className);
+    }
+
+    return $tag;
+}
+
+function createPlayer(playerObj) {
+    let $mainCont =  createElement('div', 'player' + playerObj.player);
+    let $progressBar =  createElement('div', 'progressbar');
+    let $playerLife = createElement('div', 'life');
+    let $playerName = createElement('div', 'name');
+    let $character = createElement('div', 'character');
+    let $playerImg = createElement('img');
+
+    $playerName.innerText = playerObj.name;
+    $playerLife.style.width = playerObj.hp + "%";
+    $playerImg.src = playerObj.img;
 
     $mainCont.appendChild($progressBar);
         $progressBar.appendChild($playerLife);
@@ -49,7 +69,29 @@ function createPlayer(id, player) {
     $mainCont.appendChild($character);
         $character.appendChild($playerImg);
 
+    return $mainCont;
+
 }
 
-createPlayer('player1', scorpion);
-createPlayer('player2', kitana);
+function playerWin(name) {
+    const $winTitle = createElement('div', 'loseTitle');
+    $winTitle.innerText = name + " win";
+
+    return $winTitle;
+}
+
+function playerLose(name) {
+    const $loseTitle = createElement('div', 'loseTitle');
+    $loseTitle.innerText = name + " lose";
+
+    return $loseTitle;
+}
+
+randomBtn.addEventListener('click', function() {
+    changeHP(player1);
+    changeHP(player2);
+});
+
+
+$arenas.appendChild(createPlayer(player1));
+$arenas.appendChild(createPlayer(player2));
